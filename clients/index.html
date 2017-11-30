@@ -14,21 +14,44 @@
         background: #000000;
         color: #ffffff;
       }
-      div {
-        margin: auto;
-        width: 70%;
-        height: 70%;
-      }
     </style>
-    <div>
-      <h1>Desktop Recorder</h1>
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" type="text/css" href="./stylesheets/ex/bootstrap.min.css">
+
+	    <!-- Bootstrap Material Design -->
+	    <link rel="stylesheet" type="text/css" href="./stylesheets/ex/bootstrap-material-design.min.css">
+	    <link rel="stylesheet" type="text/css" href="./stylesheets/ex/ripples.min.css">
+
+		<!-- jQuery -->
+    	<script src="./javascripts/ex/jquery.min.js"></script>
+      <script>window.$ = window.jQuery = require('./javascripts/ex/jquery.min.js');</script>
+      
+    	<!-- anime -->
+		<script src="./javascripts/ex/anime.min.js"></script>
+
+
+    <div class="container">
       <!-- All of the Node.js APIs are available in this renderer process. -->
-      <div>
-        <input type="text" id="name_input" placeholder="Input your name." style="width:30%;">
-        <button id="start_button" style="width:70%;">start</button>
+      <div style="position:absolute;top:50%;transform:translateY(-50%);-webkit-transform:translateY(-50%);">
+        <h1>DesktopRecorder</h1>   
+        <form>
+            <input class="input" type="text" id="name_input" placeholder="Input your name.">
+            <button class="btn" id="start_button">start</button>
+        </form>
       </div>
     </div>
+    <!-- Twitter Bootstrap -->
+    <script src="./javascripts/ex/bootstrap.min.js"></script>
+
+    <!-- Material Design for Bootstrap -->
+    <script src="./javascripts/ex/material.min.js"></script>
+    <script src="./javascripts/ex/ripples.min.js"></script>
+    
     <script>
+      $.material.init();
+   
+
       // You can also require other files to run in this process
       require('./renderer.js')
       const { ipcRenderer } = require("electron");
