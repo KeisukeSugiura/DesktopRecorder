@@ -4,6 +4,7 @@
  */
 const path = require("path");
 const fs = require("fs");
+const child_process = require("child_process");
 
 const USER_DIR = process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"];
 const SAVE_DIR = path.join(USER_DIR, "./Desktop/Gaze");
@@ -36,10 +37,9 @@ socket.on("disconnect", async ()=>{
 });
 
 socket.on("gazeData", (message) => {
-  console.log("gazeData")
   if(isRecording){
     RecordService.appendGazeData(message);
-    console.log(RecordService.gazeDataStack);
+    //console.log(RecordService.gazeDataStack);
   }
 });
 
@@ -61,7 +61,8 @@ class RecordService {
     this.gazeDataStack = [];
     WindowService.createStopTray(()=>{
       isRecording = false; // Warn
-      this.stopRecording();
+      socket.disconnect();
+      //this.stopRecording();
     });
     WindowService.mainWindow.hide();
     fs.mkdirSync(path.join(SAVE_DIR,userName))
@@ -79,6 +80,7 @@ class RecordService {
     try {
       await RecordService.saveMovie();      
       await RecordService.saveGazeData();
+      await RecordService.createGazeMovie();
       WindowService.terminate();
     } catch (error) {
       console.error(error);
@@ -106,6 +108,16 @@ class RecordService {
       console.log("saveMovie");
       this.movie.stop()
       resolve();
+    });
+  }
+
+  static createGazeMovie() {
+    return new Promise((resolve, reject) => {
+      console.log("gaze movie");
+      child_process.exec("python3 " + "./modules/composite.py "+ userName, (err, stdout, stderr) => {
+        console.log("OK")
+        resolve()
+      });
     });
   }
 
