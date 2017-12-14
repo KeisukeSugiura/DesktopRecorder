@@ -8,7 +8,14 @@ const child_process = require("child_process");
 
 const USER_DIR = process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"];
 const SAVE_DIR = path.join(USER_DIR, "./Desktop/Gaze");
-const SOCKET_URL = "http://localhost:3000";
+const SOCKET_URL = "http://10.211.55.3:50000";
+
+const mClientScreenWidth  = 1920
+const mClientScreenHeight = 1200
+const mServerScreenWidth = 1920
+const mServerScreenHeight = 1200
+const GAZE_SCALE_X = mClientScreenWidth / mServerScreenWidth;
+const GAZE_SCALE_Y = mClientScreenHeight / mServerScreenHeight;
 
 const { ipcMain } = require("electron");
 const WindowService = require("./WindowService");
@@ -18,6 +25,8 @@ const { ScreenRecorder } = require("screen-recorder");
 var isReady = false;
 var isRecording = false;
 var userName = "noname";
+
+
 
 socket.on("connect", (client)=>{
   isReady = true;
@@ -49,7 +58,7 @@ ipcMain.on("start_record", (event, message) => {
     userName = message.name + (new Date()).getTime();
     console.log(userName);
     isRecording = true;
-    socket.emit("start_record");
+    socket.emit("requestGazeData");
     RecordService.startRecording();    
   }
 });
@@ -80,7 +89,7 @@ class RecordService {
     try {
       await RecordService.saveMovie();      
       await RecordService.saveGazeData();
-      await RecordService.createGazeMovie();
+      //await RecordService.createGazeMovie();
       WindowService.terminate();
     } catch (error) {
       console.error(error);
@@ -88,7 +97,11 @@ class RecordService {
   }
 
   static appendGazeData(gazeData) {
-    this.gazeDataStack.push(gazeData);
+    this.gazeDataStack.push({
+      x: gazeData[0],
+      y: gazeData[1],
+      time: gazeData[2]
+    });
   }
 
   // Promiseメソッド

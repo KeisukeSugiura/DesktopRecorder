@@ -21,7 +21,7 @@ class WindowService {
     }))
     
     // Open the DevTools.
-    // this.mainWindow.webContents.openDevTools()
+    this.mainWindow.webContents.openDevTools()
 
     this.mainWindow.on("closed", () => {
       this.mainWindow = null;

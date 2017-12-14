@@ -57,10 +57,10 @@ def overlay_movie(gazeData):
   # フレームの読み込みに成功している間フレームを書き出し続ける
   while ret:
     
-    if((pointer+1 < len(gazeData)) and (abs(time - gazeData[pointer+1]["time"]) < 100 / 3 ) and (time - gazeData[pointer]["time"] > time - gazeData[pointer+1]["time"])):
+    if((pointer+1 < len(gazeData)) and (abs(time - int(gazeData[pointer+1]["time"])) < 100 / 3 ) and (time - int(gazeData[pointer]["time"]) > time - int(gazeData[pointer+1]["time"]))):
       pointer = pointer+1
-      render_x = int(gazeData[pointer]["x"])
-      render_y = int(gazeData[pointer]["y"])
+      render_x = int(float(gazeData[pointer]["x"]))
+      render_y = int(float(gazeData[pointer]["y"]))
       print("update")
       
     
